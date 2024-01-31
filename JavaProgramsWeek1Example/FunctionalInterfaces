@@ -1,0 +1,187 @@
+Predefined Functional Interface - 
+    - comes with commonly used methods,
+    which are available to the programmer by default.
+    - Predefined Functional Interface makes code more readable,maintainable.
+    - reduces the boilerplate code, when used with Lambdas
+ 
+ 1. Predicate<T> -
+    -   used to implement some conditional checks. 
+    -   contains method boolean test(T t)
+    -   Predicate returns only boolean
+    - e.g 
+    - Predicate<Integer> p = (i)->(i>0) && (i<10)
+    - System.out.println(p.test(9));
+     
+ 2. Function<T, R> -
+    - used to perform some operation and return some result
+    - Function<T, R> it can return any type of value
+    - T is method input parameter and R is Return type 
+    - e.g. -
+        //      Function<String, Integer> fun = (str)->str.length();
+        //      System.out.println("length is "+fun.apply("India"));
+        //      
+        //      Function<Person, String> fun2 = (person)->person.getName()+" leaves in "+person.getCity();
+        //      System.out.println(fun2.apply(new Person(101, "John", "Banglore")));
+        //      
+        //      Function<Person, String> fun3 = (person)->
+        //      {
+        //          if(person.getId()==101)
+        //          {
+        //              return person.getName()+" leaves in "+person.getCity();
+        //          }
+        //          else
+        //          {
+        //              return "Incorrect Person";
+        //          }
+        //          
+        //          
+        //      };
+        //      System.out.println(fun3.apply(new Person(104, "John", "Banglore")));
+    
+3. Consumer<T> -
+    - used when we have to provide some input parameter, perform certain operations
+      but don'nt return anything
+    - used to consume object and perform certain operations
+    - void accept(T t) 
+    - T is type method input parameter
+        //---------------------------------------------------------------------
+        //      Consumer<Person> c1 = (person)-> System.out.println(person);
+        //      c1.accept(new Person(102, "Mira", "Delhi"));
+        //      
+        //      Consumer<Person> c2 = (person)->
+        //      {
+        //          if(person.getId()==101)
+        //          {
+        //              person.setName("ADMIN");
+        //          }
+        //          System.out.println(person);
+        //      };
+        //      
+        //      c2.accept(new Person(101, "Mira", "Delhi"));
+        //---------------------------------------------------------------------
+4. Supplier<R> -
+    - does'nt take any input but always return some object
+    - used mostly in operations where we want to supply Random values, Random Tokens
+        Random Passwords
+    - R get()
+    - R is return type
+        //      //---------------------------------------------------------------------
+        //      Supplier<String> otps = ()->
+        //      {
+        //          String otp="";
+        //          
+        //          otp = otp + new Random().nextInt();             
+        //          
+        //          return otp;
+        //      };
+        //      System.out.println("1st call "+otps.get());
+        //      System.out.println("2nd call "+otps.get());
+        //      System.out.println("3rd call "+otps.get());
+        //      //---------------------------------------------------------------------
+    
+        
+5. BiPredicate<T,U>-
+    - similar to Predicate, except that it takes two input arguments
+    - T and U are type of input parameters
+    - boolean test(T t , U u)
+        //---------------------------------------------------------------------
+        //      BiPredicate<Person, Person> biPred =(p1, p2)->
+        //      {
+        //          return p1.equals(p2); //added equals() method in Person class
+        //      };
+        //      
+        //      Person p1 = new Person(101, "Mira", "Delhi");
+        //      Person p2 = new Person(101, "Mira", "Delhi");
+        //
+        //      System.out.println(biPred.test(p1,p2));
+        //---------------------------------------------------------------------
+
+6. BiFunction<T,U,R> -
+    - similar to Function<T,R>, except that it has two input parameters
+    - R apply(T t , U u)
+    - R is return type and T and U are method input parameters type 
+        //---------------------------------------------------------------------
+        //      BiFunction<Person, Person, String> bifun =(person1, person2)->
+        //      {
+        //          String str="Both leaves in different city";
+        //          if(person1.getCity().equals(person2.getCity()))
+        //          {
+        //               str= person1.getName()+" and "+person2.getName()+" belongs to same city "+ person1.getCity();
+        //          }
+        //          return str;
+        //          
+        //      };
+        //      
+        //      Person p11= new Person(101, "Mira", "Delhi");
+        //      Person p22 = new Person(102, "Sam", "Pune");
+        //
+        //      System.out.println(bifun.apply(p11,p22));
+        //---------------------------------------------------------------------
+        
+7. BiConsumer<T,U>-
+     - similar to Consumer<T,R>, except that it has two input parameters
+     - void accept(T t, U u)
+     - T and U are method input parameters
+        //---------------------------------------------------------------------
+        //      BiConsumer<Integer, Person> biCon =(num, person)->
+        //      {
+        //          Map<Integer, Person> map = new HashMap<>();
+        //          map.put(num, person);
+        //          System.out.println(map);
+        //      };
+        //      
+        //      Person person= new Person(110, "Mary", "Hyderabad");
+        //      biCon.accept(person.getId() , person);
+        //---------------------------------------------------------------------
+8. BinaryOperator<T> -
+    - it extends BiFunction<T,T,T>
+    - Represents an operation upon two operands of the same type, 
+        producing a result of the same type as the operands. 
+    - This is a specialization of BiFunction for the case where the operands 
+        and the result are all of the same type.
+    - This is a functional interface whose functional method is 
+        BiFunction.apply(Object, Object).
+    - static <T> BinaryOperator<T>  maxBy(Comparator<? super T> comparator)
+        Returns a BinaryOperator which returns the greater of two elements 
+        according to the specified Comparator.
+    - static <T> BinaryOperator<T>  minBy(Comparator<? super T> comparator)
+        Returns a BinaryOperator which returns the lesser of two elements 
+        according to the specified Comparator.
+        //---------------------------------------------------------------------
+        Person p11= new Person(101, "Mira", "Delhi");
+        Person p22 = new Person(102, "Sam", "Pune");
+        
+        BinaryOperator<Person> binOp1=BinaryOperator.maxBy(new PersonComparator());
+        System.out.println("MAX ID is "+binOp1.apply(p11, p22));
+        
+        BinaryOperator<Person> binOp2=BinaryOperator.minBy(new PersonComparator());
+        System.out.println("MIN ID is "+binOp2.apply(p11, p22));
+        //---------------------------------------------------------------------
+9. UnaryOperator<>
+    - public interface UnaryOperator<T>extends Function<T,T>
+    - Represents an operation on a single operand that produces a 
+        result of the same type as its operand. 
+    - This is a specialization of Function for the case where the operand
+        and result are of the same type.
+    - static <T> UnaryOperator<T>   identity()
+        Returns a unary operator that always returns its input argument.
+        This is a functional interface whose functional method is 
+        Function.apply(Object).
+        
+    //---------------------------------------------------------------------
+
+        UnaryOperator<String> unaryOp = UnaryOperator.identity();
+        System.out.println(unaryOp.apply("Welcome"));
+        
+        UnaryOperator<Integer> unaryOp2= i->i*i;
+        System.out.println(unaryOp2.apply(12));
+        
+        UnaryOperator<Person> unaryOp3 = (Person)->
+        {
+            int id= person.getId()+1;
+            String name= "Mr. "+person.getName();
+            return new Person(id, name, person.getCity());
+        };
+        Person pop1 = unaryOp3.apply(p111);
+        System.out.println(pop1);
+    //---------------------------------------------------------------------
